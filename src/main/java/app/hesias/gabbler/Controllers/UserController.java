@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping
@@ -29,7 +28,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User toCreate = userService.createUser(user);
-        return toCreate != null ? ResponseEntity.created(URI.create(toCreate.toString())).build() : ResponseEntity.badRequest().build();
+        return toCreate != null ? ResponseEntity.created(null).build() : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{id}")

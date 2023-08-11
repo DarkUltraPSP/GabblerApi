@@ -30,7 +30,4 @@ public class User {
     private boolean isActivated;
     private boolean isBanned;
     private boolean isPrivate;
-
-    @OneToMany(mappedBy = "user")
-    private List<Gab> gabs;
 }

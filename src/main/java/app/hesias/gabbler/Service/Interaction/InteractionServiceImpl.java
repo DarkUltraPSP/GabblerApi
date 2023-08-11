@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class InteractionImpl implements InteractionService {
+public class InteractionServiceImpl implements InteractionService {
     private final InteractionRepo interactionRepo;
 
     @Override
