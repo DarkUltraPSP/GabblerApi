@@ -7,6 +7,8 @@ import app.hesias.gabbler.Repository.UserRelationshipRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @AllArgsConstructor
 public class UserRelationshipServiceImpl implements UserRelationshipService {
@@ -18,12 +20,13 @@ public class UserRelationshipServiceImpl implements UserRelationshipService {
     }
 
     @Override
-    public UserRelationship getByUser1AndUser2(User user1, User user2) {
-        return userRelationshipRepository.getByUser1AndUser2(user1.getIdUser(), user2.getIdUser());
+    public UserRelationship getByUser1AndUser2(int user1, int user2) {
+        return userRelationshipRepository.getByUser1AndUser2(user1, user2);
     }
 
     @Override
     public UserRelationship createUserRelationship(UserRelationship userRelationship) {
+        userRelationship.setCreatedAt(LocalDateTime.now());
         return userRelationshipRepository.save(userRelationship);
     }
 
@@ -37,6 +40,9 @@ public class UserRelationshipServiceImpl implements UserRelationshipService {
     @Override
     public UserRelationship deleteUserRelationship(UserRelationship userRelationship) {
         UserRelationship userRelationshipToDelete = userRelationshipRepository.getByUser1AndUser2(userRelationship.getUser1().getIdUser(), userRelationship.getUser2().getIdUser());
+        if (userRelationshipToDelete == null) {
+            return null;
+        }
         userRelationshipRepository.delete(userRelationshipToDelete);
         return userRelationshipToDelete;
     }

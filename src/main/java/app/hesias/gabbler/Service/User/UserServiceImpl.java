@@ -2,10 +2,12 @@ package app.hesias.gabbler.Service.User;
 
 import app.hesias.gabbler.Model.User;
 import app.hesias.gabbler.Repository.UserRepo;
+import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setEmail(user.getEmail());
             userToUpdate.setBirthdate(user.getBirthdate());
             userToUpdate.setPhone(user.getPhone());
-            userToUpdate.setPassword(user.getPassword());
+            userToUpdate.setPassword(Hashing.sha256().hashString(user.getPassword(), StandardCharsets.UTF_8).toString());
             userToUpdate.setBiography(user.getBiography());
             userToUpdate.setProfilePictureUrl(user.getProfilePictureUrl());
             userToUpdate.setBannerPictureUrl(user.getBannerPictureUrl());
