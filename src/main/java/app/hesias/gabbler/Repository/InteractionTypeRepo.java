@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Repository;
 
-import app.hesias.gabbler.Model.InteractionType;
+import app.hesias.gabbler.Model.Entity.InteractionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

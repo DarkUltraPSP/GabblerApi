@@ -1,16 +1,15 @@
 package app.hesias.gabbler.Service.User;
 
 
-import app.hesias.gabbler.Model.User;
-import org.springframework.http.ResponseEntity;
+import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.Model.Result.UserResult;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
     List<User> getAllUsers();
-    User getUserByUuid(int id);
-    User createUser(User user);
-    User updateUser(int id, User user);
-    User deleteUser(int id);
+    UserResult getUserByUuid(int id);
+    UserResult createUser(User user);
+    UserResult updateUser(int id, User user);
+    UserResult deleteUser(int id);
 }

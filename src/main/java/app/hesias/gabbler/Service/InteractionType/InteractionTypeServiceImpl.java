@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Service.InteractionType;
 
-import app.hesias.gabbler.Model.InteractionType;
+import app.hesias.gabbler.Model.Entity.InteractionType;
 import app.hesias.gabbler.Repository.InteractionTypeRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

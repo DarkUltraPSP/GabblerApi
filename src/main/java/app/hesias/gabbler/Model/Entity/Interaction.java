@@ -1,9 +1,7 @@
-package app.hesias.gabbler.Model;
+package app.hesias.gabbler.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "interaction")

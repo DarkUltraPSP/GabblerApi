@@ -1,9 +1,7 @@
 package app.hesias.gabbler.Controllers;
 
-import app.hesias.gabbler.Model.Gab;
-import app.hesias.gabbler.Model.User;
+import app.hesias.gabbler.Model.Entity.Gab;
 import app.hesias.gabbler.Service.Gab.GabService;
-import app.hesias.gabbler.Service.User.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

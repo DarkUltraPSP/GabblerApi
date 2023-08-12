@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Service.UserRelationshipType;
 
-import app.hesias.gabbler.Model.UserRelationshipType;
+import app.hesias.gabbler.Model.Entity.UserRelationshipType;
 import app.hesias.gabbler.Repository.UserRelationshipTypeRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

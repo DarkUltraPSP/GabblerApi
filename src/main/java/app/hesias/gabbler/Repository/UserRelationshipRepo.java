@@ -1,7 +1,7 @@
 package app.hesias.gabbler.Repository;
 
-import app.hesias.gabbler.Model.UserRelationship;
-import app.hesias.gabbler.Model.UserRelationshipType;
+import app.hesias.gabbler.Model.Entity.UserRelationship;
+import app.hesias.gabbler.Model.Entity.UserRelationshipType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

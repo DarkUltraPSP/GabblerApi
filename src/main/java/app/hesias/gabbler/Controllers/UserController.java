@@ -1,12 +1,13 @@
 package app.hesias.gabbler.Controllers;
 
-import app.hesias.gabbler.Model.User;
+import app.hesias.gabbler.Model.Entity.RequestStatus;
+import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.Model.Result.UserResult;
 import app.hesias.gabbler.Service.User.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,26 +23,33 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserByUuid(@PathVariable int id) {
-        return userService.getUserByUuid(id) != null ? ResponseEntity.ok(userService.getUserByUuid(id)) : ResponseEntity.notFound().build();
+        UserResult userResult = userService.getUserByUuid(id);
+        return userResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(userResult.getRequestStatus().getValue()).body(userResult.getUser())
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User toCreate = userService.createUser(user);
-        return toCreate != null ? ResponseEntity.created(null).build() : ResponseEntity.badRequest().build();
+        UserResult toCreate = userService.createUser(user);
+        return toCreate.getRequestStatus() == RequestStatus.CREATED ?
+                ResponseEntity.status(toCreate.getRequestStatus().getValue()).body(toCreate.getUser())
+                : ResponseEntity.status(toCreate.getRequestStatus().getValue()).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
-        User toUpdate = userService.updateUser(id, user);
-        return toUpdate != null ? ResponseEntity.ok(toUpdate) : ResponseEntity.notFound().build();
+        UserResult toUpdate = userService.updateUser(id, user);
+        return toUpdate.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(toUpdate.getRequestStatus().getValue()).body(toUpdate.getUser())
+                : ResponseEntity.status(toUpdate.getRequestStatus().getValue()).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        if (userService.deleteUser(id) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
+        UserResult toDelete = userService.deleteUser(id);
+        return toDelete.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(toDelete.getRequestStatus().getValue()).body(toDelete.getUser())
+                : ResponseEntity.status(toDelete.getRequestStatus().getValue()).build();
     }
 }

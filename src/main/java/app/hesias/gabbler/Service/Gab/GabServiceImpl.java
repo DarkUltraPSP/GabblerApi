@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Service.Gab;
 
-import app.hesias.gabbler.Model.Gab;
+import app.hesias.gabbler.Model.Entity.Gab;
 import app.hesias.gabbler.Repository.GabRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

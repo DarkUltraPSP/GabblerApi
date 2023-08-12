@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Controllers;
 
-import app.hesias.gabbler.Model.UserRelationship;
+import app.hesias.gabbler.Model.Entity.UserRelationship;
 import app.hesias.gabbler.Service.UserRelationship.UserRelationshipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +13,17 @@ public class UserRelationshipController {
     UserRelationshipService userRelationshipService;
 
     @GetMapping
-    public ResponseEntity<UserRelationship> userRelationship(@RequestParam int idUser1, @RequestParam int idUser2) {
+    public ResponseEntity<UserRelationship> usersRelationship(@RequestParam int idUser1, @RequestParam int idUser2) {
         UserRelationship userRelationship = userRelationshipService.getByUser1AndUser2(idUser1, idUser2);
         return userRelationship != null ? ResponseEntity.ok(userRelationship) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<UserRelationship> createUserRelationship(@RequestBody UserRelationship userRelationship) {
+        if (userRelationshipService.getByUser1AndUser2(userRelationship.getUser1().getIdUser(), userRelationship.getUser2().getIdUser()) != null) return ResponseEntity.status(409).build();
+
         UserRelationship toCreate = userRelationshipService.createUserRelationship(userRelationship);
-        return toCreate != null ? ResponseEntity.created(null).build() : ResponseEntity.notFound().build();
+        return toCreate != null ? ResponseEntity.created(null).body(toCreate) : ResponseEntity.badRequest().build();
     }
 
     @PutMapping

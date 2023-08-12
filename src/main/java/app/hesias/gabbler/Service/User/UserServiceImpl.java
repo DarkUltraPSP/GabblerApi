@@ -1,10 +1,11 @@
 package app.hesias.gabbler.Service.User;
 
-import app.hesias.gabbler.Model.User;
+import app.hesias.gabbler.Model.Entity.RequestStatus;
+import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.Model.Result.UserResult;
 import app.hesias.gabbler.Repository.UserRepo;
 import com.google.common.hash.Hashing;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -22,21 +23,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUuid(int id) {
-        return userRepo.findById(id).orElse(null);
+    public UserResult getUserByUuid(int id) {
+        User user = userRepo.findById(id).orElse(null);
+        return UserResult.builder()
+                .user(user)
+                .requestStatus(user != null ? RequestStatus.OK : RequestStatus.NOT_FOUND)
+                .build();
     }
 
     @Override
-    public User createUser(User user) {
+    public UserResult createUser(User user) {
         user.setCreatedAt(LocalDateTime.now());
+        if (userRepo.findByUsername(user.getUsername()) != null) return UserResult.builder().requestStatus(RequestStatus.CONFLICT).build();
         userRepo.save(user);
-        return user;
+        return UserResult.builder()
+                .user(user)
+                .requestStatus(RequestStatus.CREATED)
+                .build();
     }
 
     @Override
-    public User updateUser(int id, User user) {
+    public UserResult updateUser(int id, User user) {
         User userToUpdate = userRepo.findById(id).orElse(null);
         if (userToUpdate != null) {
+            if (userRepo.findByUsername(user.getUsername()) != null) return UserResult.builder().requestStatus(RequestStatus.CONFLICT).build();
             userToUpdate.setUsername(user.getUsername());
             userToUpdate.setFirstname(user.getFirstname());
             userToUpdate.setLastname(user.getLastname());
@@ -52,15 +62,21 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setPrivate(user.isPrivate());
             userRepo.save(userToUpdate);
         }
-        return userToUpdate;
+        return UserResult.builder()
+                .user(userToUpdate)
+                .requestStatus(userToUpdate != null ? RequestStatus.OK : RequestStatus.NOT_FOUND)
+                .build();
     }
 
     @Override
-    public User deleteUser(int id) {
-        User userToDelete = userRepo.findById(id).orElse(null);
-        if (userToDelete != null) {
-            userRepo.delete(userToDelete);
+    public UserResult deleteUser(int id) {
+        User user = userRepo.findById(id).orElse(null);
+        if (user != null) {
+            userRepo.delete(user);
         }
-        return userToDelete;
+        return UserResult.builder()
+                .user(user)
+                .requestStatus(user != null ? RequestStatus.OK : RequestStatus.NOT_FOUND)
+                .build();
     }
 }

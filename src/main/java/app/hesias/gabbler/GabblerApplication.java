@@ -1,10 +1,9 @@
 package app.hesias.gabbler;
 
-import app.hesias.gabbler.Model.InteractionType;
-import app.hesias.gabbler.Model.UserRelationshipType;
+import app.hesias.gabbler.Model.Entity.InteractionType;
+import app.hesias.gabbler.Model.Entity.UserRelationshipType;
 import app.hesias.gabbler.Repository.InteractionTypeRepo;
 import app.hesias.gabbler.Service.InteractionType.InteractionTypeService;
-import app.hesias.gabbler.Service.InteractionType.InteractionTypeServiceImpl;
 import app.hesias.gabbler.Service.UserRelationshipType.UserRelationshipTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

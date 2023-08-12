@@ -1,8 +1,6 @@
 package app.hesias.gabbler.Service.InteractionType;
 
-import app.hesias.gabbler.Model.InteractionType;
-
-import java.util.List;
+import app.hesias.gabbler.Model.Entity.InteractionType;
 
 public interface InteractionTypeService {
     InteractionType createInteractionType(InteractionType interactionType);

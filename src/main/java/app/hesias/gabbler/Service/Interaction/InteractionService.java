@@ -1,6 +1,6 @@
 package app.hesias.gabbler.Service.Interaction;
 
-import app.hesias.gabbler.Model.Interaction;
+import app.hesias.gabbler.Model.Entity.Interaction;
 
 import java.util.List;
 
