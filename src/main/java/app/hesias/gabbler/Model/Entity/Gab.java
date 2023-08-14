@@ -14,7 +14,7 @@ public class Gab {
     @Column(name = "idGab", nullable = false)
     private int idGab;
     private String content;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
     private String mediaUrl;
     @ManyToOne
     @JoinColumn(name = "idUser")

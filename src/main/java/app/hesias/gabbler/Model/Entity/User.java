@@ -24,7 +24,7 @@ public class User {
     private int phone;
     private String password;
     private String biography;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
     private String profilePictureUrl;
     private String bannerPictureUrl;
     private boolean isActivated;

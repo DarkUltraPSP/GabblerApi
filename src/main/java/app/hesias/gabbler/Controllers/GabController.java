@@ -1,6 +1,8 @@
 package app.hesias.gabbler.Controllers;
 
 import app.hesias.gabbler.Model.Entity.Gab;
+import app.hesias.gabbler.Model.Entity.RequestStatus;
+import app.hesias.gabbler.Model.Result.GabResult;
 import app.hesias.gabbler.Service.Gab.GabService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +23,26 @@ public class GabController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Gab> getGabByUuid(@PathVariable int id) {
-        return gabService.getGabById(id) != null ? ResponseEntity.ok(gabService.getGabById(id)) : ResponseEntity.notFound().build();
+        GabResult gabResult = gabService.getGabById(id);
+        return gabResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(gabResult.getRequestStatus().getValue()).body(gabResult.getGab())
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<Gab> createGab(@RequestBody Gab gab) {
-        Gab toCreate = gab != null ? gabService.createGab(gab) : null;
-        return toCreate != null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        GabResult toCreate = gabService.createGab(gab);
+        return toCreate.getRequestStatus() == RequestStatus.CREATED ?
+                ResponseEntity.status(toCreate.getRequestStatus().getValue()).body(toCreate.getGab())
+                : ResponseEntity.status(toCreate.getRequestStatus().getValue()).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Gab> updateGab(@PathVariable int id, @RequestBody Gab gab) {
-        Gab toUpdate = gabService.updateGab(id, gab);
-        return toUpdate != null ? ResponseEntity.ok(toUpdate) : ResponseEntity.notFound().build();
+        GabResult toUpdate = gabService.updateGab(id, gab);
+        return toUpdate.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(toUpdate.getRequestStatus().getValue()).body(toUpdate.getGab())
+                : ResponseEntity.status(toUpdate.getRequestStatus().getValue()).build();
     }
 
     @DeleteMapping("/{id}")
