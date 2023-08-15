@@ -1,7 +1,10 @@
 package app.hesias.gabbler.Service.UserRelationshipType;
 
+import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.UserRelationshipType;
+import app.hesias.gabbler.Model.Result.UserRelationshipTypeResult;
 import app.hesias.gabbler.Repository.UserRelationshipTypeRepo;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +13,29 @@ import org.springframework.stereotype.Service;
 public class UserRelationshipTypeServiceImpl implements UserRelationshipTypeService {
     private final UserRelationshipTypeRepo userRelationshipTypeRepository;
     @Override
-    public UserRelationshipType createUserRelationshipType(UserRelationshipType userRelationshipType) {
-        return userRelationshipTypeRepository.save(userRelationshipType);
+    public UserRelationshipTypeResult createUserRelationshipType(UserRelationshipType userRelationshipType) {
+        try {
+            userRelationshipTypeRepository.save(userRelationshipType);
+            return UserRelationshipTypeResult.builder()
+                    .userRelationshipType(userRelationshipType)
+                    .build();
+        } catch (Exception e) {
+            return UserRelationshipTypeResult.builder()
+                    .build();
+        }
     }
 
     @Override
-    public UserRelationshipType getUserRelationshipTypeByLibelle(String libelle) {
-        return userRelationshipTypeRepository.findByLibelle(libelle);
+    public UserRelationshipTypeResult getUserRelationshipTypeByLibelle(String libelle) {
+        try {
+            UserRelationshipType userRelationshipType = userRelationshipTypeRepository.findByLibelle(libelle).orElseThrow(EntityNotFoundException::new);
+            return UserRelationshipTypeResult.builder()
+                    .userRelationshipType(userRelationshipType)
+                    .build();
+        } catch (Exception e) {
+            return UserRelationshipTypeResult.builder()
+                    .requestStatus(RequestStatus.NOT_FOUND)
+                    .build();
+        }
     }
 }

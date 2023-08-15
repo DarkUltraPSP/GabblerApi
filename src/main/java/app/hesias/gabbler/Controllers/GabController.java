@@ -47,9 +47,9 @@ public class GabController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Gab> deleteGab(@PathVariable int id) {
-        if (gabService.deleteGab(id) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
+        GabResult gabResult = gabService.deleteGab(id);
+        return gabResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(gabResult.getRequestStatus().getValue()).body(gabResult.getGab())
+                : ResponseEntity.status(gabResult.getRequestStatus().getValue()).build();
     }
 }

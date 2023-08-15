@@ -1,6 +1,8 @@
 package app.hesias.gabbler.Controllers;
 
+import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.UserRelationship;
+import app.hesias.gabbler.Model.Result.UserRelationshipResult;
 import app.hesias.gabbler.Service.UserRelationship.UserRelationshipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,30 +15,34 @@ public class UserRelationshipController {
     UserRelationshipService userRelationshipService;
 
     @GetMapping
-    public ResponseEntity<UserRelationship> usersRelationship(@RequestParam int idUser1, @RequestParam int idUser2) {
-        UserRelationship userRelationship = userRelationshipService.getByUser1AndUser2(idUser1, idUser2);
-        return userRelationship != null ? ResponseEntity.ok(userRelationship) : ResponseEntity.notFound().build();
+    public ResponseEntity<UserRelationship> getUser1And2Relationship (@RequestParam int idUser1, @RequestParam int idUser2) {
+        UserRelationshipResult userRelationship = userRelationshipService.getByUser1AndUser2(idUser1, idUser2);
+        return userRelationship.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(userRelationship.getRequestStatus().getValue()).body(userRelationship.getUserRelationship())
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<UserRelationship> createUserRelationship(@RequestBody UserRelationship userRelationship) {
-        if (userRelationshipService.getByUser1AndUser2(userRelationship.getUser1().getIdUser(), userRelationship.getUser2().getIdUser()) != null) return ResponseEntity.status(409).build();
-
-        UserRelationship toCreate = userRelationshipService.createUserRelationship(userRelationship);
-        return toCreate != null ? ResponseEntity.created(null).body(toCreate) : ResponseEntity.badRequest().build();
+        UserRelationshipResult toCreate = userRelationshipService.createUserRelationship(userRelationship);
+        return toCreate.getRequestStatus() == RequestStatus.CREATED ?
+                ResponseEntity.status(toCreate.getRequestStatus().getValue()).body(toCreate.getUserRelationship())
+                : ResponseEntity.status(toCreate.getRequestStatus().getValue()).build();
     }
 
     @PutMapping
     public ResponseEntity<UserRelationship> updateUserRelationship(@RequestBody UserRelationship userRelationship) {
-        UserRelationship toUpdate = userRelationshipService.updateUserRelationship(userRelationship);
-        return toUpdate != null ? ResponseEntity.ok(toUpdate) : ResponseEntity.notFound().build();
+        UserRelationshipResult toUpdate = userRelationshipService.updateUserRelationship(userRelationship);
+        return toUpdate.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(toUpdate.getRequestStatus().getValue()).body(toUpdate.getUserRelationship())
+                : ResponseEntity.status(toUpdate.getRequestStatus().getValue()).build();
     }
 
      @DeleteMapping
     public ResponseEntity<UserRelationship> deleteUserRelationship(@RequestBody UserRelationship userRelationship) {
-         if (userRelationshipService.deleteUserRelationship(userRelationship) == null) {
-             return ResponseEntity.notFound().build();
-         }
-         return ResponseEntity.ok().build();
+        UserRelationshipResult userRelationshipResult = userRelationshipService.deleteUserRelationship(userRelationship);
+        return userRelationshipResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(userRelationshipResult.getRequestStatus().getValue()).body(userRelationshipResult.getUserRelationship())
+                : ResponseEntity.status(userRelationshipResult.getRequestStatus().getValue()).build();
     }
 }

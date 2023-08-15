@@ -10,5 +10,5 @@ public interface GabService {
     GabResult getGabById(int id);
     GabResult createGab(Gab gab);
     GabResult updateGab(int id, Gab gab);
-    Gab deleteGab(int id);
+    GabResult deleteGab(int id);
 }

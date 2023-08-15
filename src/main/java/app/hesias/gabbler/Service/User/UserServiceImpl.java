@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error(e.getMessage());
             return UserResult.builder()
-                    .user(null)
                     .requestStatus(RequestStatus.NOT_FOUND)
                     .build();
         }
@@ -59,12 +58,10 @@ public class UserServiceImpl implements UserService {
             log.error(e.getMessage());
             if (e instanceof EntityExistsException) {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.CONFLICT)
                         .build();
             } else {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
                         .build();
             }
@@ -75,6 +72,10 @@ public class UserServiceImpl implements UserService {
     public UserResult updateUser(int id, User user) {
         try {
             User userToUpdate = userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+            User userWithSameUsername = userRepo.findByUsername(user.getUsername()).orElse(null);
+            if (userWithSameUsername != null) {
+                throw new EntityExistsException("User with the same username already exists");
+            }
 
             modelMapper.map(user, userToUpdate);
             userRepo.save(userToUpdate);
@@ -87,12 +88,14 @@ public class UserServiceImpl implements UserService {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.NOT_FOUND)
+                        .build();
+            } else if (e instanceof EntityExistsException) {
+                return UserResult.builder()
+                        .requestStatus(RequestStatus.CONFLICT)
                         .build();
             } else {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
                         .build();
             }
@@ -102,22 +105,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResult deleteUser(int id) {
         try {
-            User user = userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-            userRepo.delete(user);
+            User userToDelete = userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+            userRepo.delete(userToDelete);
             return UserResult.builder()
-                    .user(user)
+                    .user(userToDelete)
                     .requestStatus(RequestStatus.OK)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.NOT_FOUND)
                         .build();
             } else {
                 return UserResult.builder()
-                        .user(null)
                         .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
                         .build();
             }
