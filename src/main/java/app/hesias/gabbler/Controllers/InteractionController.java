@@ -25,8 +25,8 @@ public class InteractionController {
         }
     }
 
-    @GetMapping("/{idGab}")
-    public ResponseEntity<InteractionResults> getInteractionByGab(int idGab) {
+    @GetMapping("/gab/{idGab}")
+    public ResponseEntity<InteractionResults> getInteractionByGab(@PathVariable int idGab) {
         InteractionResults interactionResults = interactionService.getInteractionByGab(idGab);
         if (interactionResults.getRequestStatus() == RequestStatus.OK) {
             return ResponseEntity.ok(interactionResults);
@@ -36,7 +36,7 @@ public class InteractionController {
     }
 
     @GetMapping("/{interactionType}/{idGab}")
-    public ResponseEntity<InteractionResults> getInteractionTypeByIdGab(String interactionType, int idGab) {
+    public ResponseEntity<InteractionResults> getInteractionTypeByIdGab(@PathVariable String interactionType, @PathVariable int idGab) {
         InteractionResults interactionResults = interactionService.getInteractionTypeByIdGab(interactionType, idGab);
         if (interactionResults.getRequestStatus() == RequestStatus.OK) {
             return ResponseEntity.ok(interactionResults);
@@ -45,8 +45,8 @@ public class InteractionController {
         }
     }
 
-    @GetMapping("/{idUser}")
-    public ResponseEntity<InteractionResults> getInteractionByUser(int idUser) {
+    @GetMapping("/user/{idUser}")
+    public ResponseEntity<InteractionResults> getInteractionByUser(@PathVariable int idUser) {
         InteractionResults interactionResults = interactionService.getInteractionByUser(idUser);
         if (interactionResults.getRequestStatus() == RequestStatus.OK) {
             return ResponseEntity.ok(interactionResults);
@@ -65,7 +65,7 @@ public class InteractionController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<InteractionResult> updateInteraction(@RequestBody Interaction interaction) {
         InteractionResult interactionResult = interactionService.updateInteraction(interaction);
         if (interactionResult.getRequestStatus() == RequestStatus.OK) {
@@ -76,7 +76,7 @@ public class InteractionController {
     }
 
     @DeleteMapping
-    public ResponseEntity<InteractionResult> deleteInteraction(Interaction interaction) {
+    public ResponseEntity<InteractionResult> deleteInteraction(@RequestBody Interaction interaction) {
         InteractionResult interactionResult = interactionService.deleteInteraction(interaction);
         if (interactionResult.getRequestStatus() == RequestStatus.OK) {
             return ResponseEntity.ok(interactionResult);
