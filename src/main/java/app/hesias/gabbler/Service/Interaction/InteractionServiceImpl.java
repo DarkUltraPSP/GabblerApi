@@ -7,7 +7,6 @@ import app.hesias.gabbler.Model.Result.InteractionResults;
 import app.hesias.gabbler.Repository.GabRepo;
 import app.hesias.gabbler.Repository.InteractionRepo;
 import app.hesias.gabbler.Repository.UserRepo;
-import app.hesias.gabbler.Service.Gab.GabService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +71,29 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Override
+    public InteractionResults getInteractionTypeByIdGab(String type, int idGab) {
+        try {
+            gabRepo.findById(idGab).orElseThrow(EntityNotFoundException::new);
+            List<Interaction> interactions = interactionRepo.findByTypeByGabs(type, idGab).orElseThrow(EntityNotFoundException::new);
+            return InteractionResults.builder()
+                    .interactions(interactions)
+                    .requestStatus(RequestStatus.OK)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (e instanceof EntityNotFoundException) {
+                return InteractionResults.builder()
+                        .requestStatus(RequestStatus.NOT_FOUND)
+                        .build();
+            } else {
+                return InteractionResults.builder()
+                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
+                        .build();
+            }
+        }
+    }
+
+    @Override
     public InteractionResult getInteractionById(int id) {
         try {
             Interaction interaction = interactionRepo.findById(id).orElseThrow(EntityNotFoundException::new);
@@ -84,6 +106,30 @@ public class InteractionServiceImpl implements InteractionService {
             return InteractionResult.builder()
                     .requestStatus(RequestStatus.NOT_FOUND)
                     .build();
+        }
+    }
+
+    @Override
+    public InteractionResult getInteractionByGabByUser(int idGab, int idUser) {
+        try {
+            gabRepo.findById(idGab).orElseThrow(EntityNotFoundException::new);
+            userRepo.findById(idUser).orElseThrow(EntityNotFoundException::new);
+            Interaction interaction = interactionRepo.findByGabByUser(idGab, idUser).orElseThrow(EntityNotFoundException::new);
+            return InteractionResult.builder()
+                    .interaction(interaction)
+                    .requestStatus(RequestStatus.OK)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (e instanceof EntityNotFoundException) {
+                return InteractionResult.builder()
+                        .requestStatus(RequestStatus.NOT_FOUND)
+                        .build();
+            } else {
+                return InteractionResult.builder()
+                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
+                        .build();
+            }
         }
     }
 
@@ -104,9 +150,9 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Override
-    public InteractionResult updateInteraction(int id, Interaction interaction) {
+    public InteractionResult updateInteraction(Interaction interaction) {
         try {
-            Interaction interactionToUpdate = interactionRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+            Interaction interactionToUpdate = interactionRepo.findByGabByUser(interaction.getGab().getIdGab(), interaction.getUser().getIdUser()).orElseThrow(EntityNotFoundException::new);
 
             modelMapper.map(interaction, interactionToUpdate);
             interactionRepo.save(interactionToUpdate);
@@ -129,9 +175,9 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Override
-    public InteractionResult deleteInteraction(int id) {
+    public InteractionResult deleteInteraction(Interaction interaction) {
         try {
-            Interaction interactionToDelete = interactionRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+            Interaction interactionToDelete = interactionRepo.findByGabByUser(interaction.getGab().getIdGab(), interaction.getUser().getIdUser()).orElseThrow(EntityNotFoundException::new);
             interactionRepo.delete(interactionToDelete);
             return InteractionResult.builder()
                     .interaction(interactionToDelete)

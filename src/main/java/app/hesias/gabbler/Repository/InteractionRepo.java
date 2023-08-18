@@ -19,4 +19,12 @@ public interface InteractionRepo extends JpaRepository<Interaction, Integer> {
     @Query("SELECT i FROM Interaction i " +
             "WHERE i.user.idUser = :idUser")
     Optional <List<Interaction>> findAllByUserId(@Param("idUser") int id);
+
+    @Query("SELECT i FROM Interaction i " +
+            "WHERE i.interactionType.libelle = :type AND i.gab.idGab = :idGab")
+    Optional <List<Interaction>> findByTypeByGabs(@Param("type") String type,@Param("idGab") int idGab);
+
+    @Query("SELECT i FROM Interaction i " +
+            "WHERE i.gab = :idGab AND i.user.idUser = :idUser")
+    Optional <Interaction> findByGabByUser(@Param("idGab") int idGab,@Param("idUser") int idUser);
 }

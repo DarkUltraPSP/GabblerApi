@@ -9,8 +9,10 @@ import java.util.List;
 public interface InteractionService {
     InteractionResults getInteractionByGab(int idGab);
     InteractionResults getInteractionByUser(int idUser);
+    InteractionResults getInteractionTypeByIdGab(String type, int idGab);
     InteractionResult getInteractionById(int id);
+    InteractionResult getInteractionByGabByUser(int idGab, int idUser);
     InteractionResult createInteraction(Interaction interaction);
-    InteractionResult updateInteraction(int id, Interaction interaction);
-    InteractionResult deleteInteraction(int id);
+    InteractionResult updateInteraction(Interaction interaction);
+    InteractionResult deleteInteraction(Interaction interaction);
 }
