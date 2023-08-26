@@ -2,12 +2,13 @@ package app.hesias.gabbler.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_relationship_type")
-@Data
+@Getter
+@Setter
 public class UserRelationshipType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

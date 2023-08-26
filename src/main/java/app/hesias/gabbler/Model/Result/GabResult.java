@@ -5,10 +5,10 @@ import app.hesias.gabbler.Model.Entity.RequestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @AllArgsConstructor
-@Builder
-@Data
+@Getter
 public class GabResult {
     private Gab gab;
     private RequestStatus requestStatus;

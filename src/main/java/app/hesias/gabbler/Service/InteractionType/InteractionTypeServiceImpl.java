@@ -15,13 +15,9 @@ public class InteractionTypeServiceImpl implements InteractionTypeService{
     public InteractionTypeResult createInteractionType(InteractionType interactionType) {
         try {
             interactionTypeRepository.save(interactionType);
-            return InteractionTypeResult.builder()
-                    .interactionType(interactionType)
-                    .build();
+            return new InteractionTypeResult(interactionType, RequestStatus.CREATED);
         } catch (Exception e) {
-            return InteractionTypeResult.builder()
-                    .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                    .build();
+            return new InteractionTypeResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -29,14 +25,9 @@ public class InteractionTypeServiceImpl implements InteractionTypeService{
     public InteractionTypeResult getInteractionTypeByLibelle(String libelle) {
         try {
             InteractionType interactionType = interactionTypeRepository.findByLibelle(libelle).orElseThrow(Exception::new);
-            return InteractionTypeResult.builder()
-                    .interactionType(interactionType)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionTypeResult(interactionType, RequestStatus.OK);
         } catch (Exception e) {
-            return InteractionTypeResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new InteractionTypeResult(null, RequestStatus.NOT_FOUND);
         }
     }
 }

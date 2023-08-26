@@ -2,14 +2,16 @@ package app.hesias.gabbler.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.Date;
 
 @Entity
 @Table(name = "utilisateur")
-@Data
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -24,7 +26,7 @@ public class User {
     private int phone;
     private String password;
     private String biography;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Date createdAt = new Date();
     private String profilePictureUrl;
     private String bannerPictureUrl;
     private boolean isActivated;

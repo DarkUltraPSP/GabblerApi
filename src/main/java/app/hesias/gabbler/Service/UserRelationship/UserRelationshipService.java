@@ -1,8 +1,6 @@
 package app.hesias.gabbler.Service.UserRelationship;
 
-import app.hesias.gabbler.Model.Entity.User;
 import app.hesias.gabbler.Model.Entity.UserRelationship;
-import app.hesias.gabbler.Model.Entity.UserRelationshipType;
 import app.hesias.gabbler.Model.Result.UserRelationshipResult;
 
 public interface UserRelationshipService {

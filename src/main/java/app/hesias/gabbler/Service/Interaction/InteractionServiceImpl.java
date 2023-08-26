@@ -29,20 +29,13 @@ public class InteractionServiceImpl implements InteractionService {
         try {
             gabRepo.findById(idGab).orElseThrow(EntityNotFoundException::new);
             List<Interaction> interactions = interactionRepo.findAllByGabId(idGab).orElseThrow(EntityNotFoundException::new);
-            return InteractionResults.builder()
-                    .interactions(interactions)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResults(interactions, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResults(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResults(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -52,20 +45,13 @@ public class InteractionServiceImpl implements InteractionService {
         try {
             userRepo.findById(idUser).orElseThrow(EntityNotFoundException::new);
             List<Interaction> interactions = interactionRepo.findAllByUserId(idUser).orElseThrow(EntityNotFoundException::new);
-            return InteractionResults.builder()
-                    .interactions(interactions)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResults(interactions, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResults(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResults(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -75,20 +61,13 @@ public class InteractionServiceImpl implements InteractionService {
         try {
             gabRepo.findById(idGab).orElseThrow(EntityNotFoundException::new);
             List<Interaction> interactions = interactionRepo.findByTypeByGabs(type, idGab).orElseThrow(EntityNotFoundException::new);
-            return InteractionResults.builder()
-                    .interactions(interactions)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResults(interactions, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResults(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResults.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResults(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -97,15 +76,10 @@ public class InteractionServiceImpl implements InteractionService {
     public InteractionResult getInteractionById(int id) {
         try {
             Interaction interaction = interactionRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-            return InteractionResult.builder()
-                    .interaction(interaction)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResult(interaction, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return InteractionResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new InteractionResult(null, RequestStatus.NOT_FOUND);
         }
     }
 
@@ -115,20 +89,13 @@ public class InteractionServiceImpl implements InteractionService {
             gabRepo.findById(idGab).orElseThrow(EntityNotFoundException::new);
             userRepo.findById(idUser).orElseThrow(EntityNotFoundException::new);
             Interaction interaction = interactionRepo.findByGabByUser(idGab, idUser).orElseThrow(EntityNotFoundException::new);
-            return InteractionResult.builder()
-                    .interaction(interaction)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResult(interaction, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -137,15 +104,10 @@ public class InteractionServiceImpl implements InteractionService {
     public InteractionResult createInteraction(Interaction interaction) {
         try {
             interactionRepo.save(interaction);
-            return InteractionResult.builder()
-                    .interaction(interaction)
-                    .requestStatus(RequestStatus.CREATED)
-                    .build();
+            return new InteractionResult(interaction, RequestStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return InteractionResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new InteractionResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -156,20 +118,13 @@ public class InteractionServiceImpl implements InteractionService {
 
             modelMapper.map(interaction, interactionToUpdate);
             interactionRepo.save(interactionToUpdate);
-            return InteractionResult.builder()
-                    .interaction(interactionToUpdate)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResult(interactionToUpdate, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -179,20 +134,13 @@ public class InteractionServiceImpl implements InteractionService {
         try {
             Interaction interactionToDelete = interactionRepo.findByGabByUser(interaction.getGab().getIdGab(), interaction.getUser().getIdUser()).orElseThrow(EntityNotFoundException::new);
             interactionRepo.delete(interactionToDelete);
-            return InteractionResult.builder()
-                    .interaction(interactionToDelete)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new InteractionResult(interactionToDelete, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new InteractionResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return InteractionResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new InteractionResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

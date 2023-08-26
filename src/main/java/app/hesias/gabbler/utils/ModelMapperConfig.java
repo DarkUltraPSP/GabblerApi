@@ -10,8 +10,6 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.google.common.collect.Iterables.skip;
-
 @Configuration
 public class ModelMapperConfig {
      @Bean

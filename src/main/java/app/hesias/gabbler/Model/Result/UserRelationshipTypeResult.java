@@ -5,10 +5,10 @@ import app.hesias.gabbler.Model.Entity.UserRelationshipType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 @AllArgsConstructor
-@Builder
-@Data
+@Getter
 public class UserRelationshipTypeResult {
     private UserRelationshipType userRelationshipType;
     private RequestStatus requestStatus;

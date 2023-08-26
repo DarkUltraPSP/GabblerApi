@@ -2,6 +2,7 @@ package app.hesias.gabbler.Controllers;
 
 import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.Model.Result.JwtResult;
 import app.hesias.gabbler.Model.Result.UserResult;
 import app.hesias.gabbler.Service.User.UserService;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,14 @@ public class UserController {
         return toCreate.getRequestStatus() == RequestStatus.CREATED ?
                 ResponseEntity.status(toCreate.getRequestStatus().getValue()).body(toCreate.getUser())
                 : ResponseEntity.status(toCreate.getRequestStatus().getValue()).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody String username,@RequestBody String password) {
+        JwtResult jwtResult = userService.login(username, password);
+        return jwtResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(jwtResult.getRequestStatus().getValue()).body(jwtResult.getJwt())
+                : ResponseEntity.status(jwtResult.getRequestStatus().getValue()).build();
     }
 
     @PutMapping("/{id}")

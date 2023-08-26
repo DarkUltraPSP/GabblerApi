@@ -2,19 +2,21 @@ package app.hesias.gabbler.Service.User;
 
 import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.Model.Result.JwtResult;
 import app.hesias.gabbler.Model.Result.UserResult;
 import app.hesias.gabbler.Repository.UserRepo;
-import com.google.common.hash.Hashing;
+import app.hesias.gabbler.utils.Security.JwtUtils;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,6 +25,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final ModelMapper modelMapper;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Override
     public List<User> getAllUsers() {
@@ -33,15 +37,10 @@ public class UserServiceImpl implements UserService {
     public UserResult getUserByUuid(int id) {
         try {
             User user = userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-            return UserResult.builder()
-                    .user(user)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new UserResult(user, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return UserResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new UserResult(null, RequestStatus.NOT_FOUND);
         }
     }
 
@@ -49,21 +48,52 @@ public class UserServiceImpl implements UserService {
     public UserResult createUser(User user) {
         try {
             userRepo.findByUsername(user.getUsername()).orElseThrow(EntityExistsException::new);
+            userRepo.findByEmail(user.getEmail()).orElseThrow(EntityExistsException::new);
             userRepo.save(user);
-            return UserResult.builder()
-                    .user(user)
-                    .requestStatus(RequestStatus.CREATED)
-                    .build();
+            return new UserResult(user, RequestStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityExistsException) {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.CONFLICT)
-                        .build();
+                return new UserResult(null, RequestStatus.CONFLICT);
             } else {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new UserResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @Override
+    public JwtResult login(String username, String password) {
+        try {
+            User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(EntityNotFoundException::new);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            return new JwtResult(jwt, RequestStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            if (e instanceof EntityNotFoundException) {
+                return new JwtResult(null, RequestStatus.NOT_FOUND);
+            } else {
+                return new JwtResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    public UserResult signup(User user) {
+        try {
+            userRepo.findByUsername(user.getUsername()).orElseThrow(EntityExistsException::new);
+            userRepo.findByEmail(user.getEmail()).orElseThrow(EntityExistsException::new);
+            userRepo.save(user);
+            return new UserResult(user, RequestStatus.CREATED);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (e instanceof EntityExistsException) {
+                return new UserResult(null, RequestStatus.CONFLICT);
+            } else {
+                return new UserResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -80,24 +110,15 @@ public class UserServiceImpl implements UserService {
             modelMapper.map(user, userToUpdate);
             userRepo.save(userToUpdate);
 
-            return UserResult.builder()
-                    .user(userToUpdate)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new UserResult(userToUpdate, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new UserResult(null, RequestStatus.NOT_FOUND);
             } else if (e instanceof EntityExistsException) {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.CONFLICT)
-                        .build();
+                return new UserResult(null, RequestStatus.CONFLICT);
             } else {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new UserResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -107,20 +128,13 @@ public class UserServiceImpl implements UserService {
         try {
             User userToDelete = userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
             userRepo.delete(userToDelete);
-            return UserResult.builder()
-                    .user(userToDelete)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new UserResult(userToDelete, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new UserResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return UserResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new UserResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

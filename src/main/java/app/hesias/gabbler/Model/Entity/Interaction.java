@@ -2,10 +2,13 @@ package app.hesias.gabbler.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "interaction")
-@Data
+@Getter
+@Setter
 public class Interaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

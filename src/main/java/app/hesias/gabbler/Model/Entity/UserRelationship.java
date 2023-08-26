@@ -2,18 +2,21 @@ package app.hesias.gabbler.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_relationship")
-@Data
+@Getter
+@Setter
 public class UserRelationship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idRelationship", nullable = false)
     private int idRelationship;
-    private LocalDateTime createdAt;
+    private Date createdAt = new Date();
 
     @ManyToOne
     @JoinColumn(name = "idRelationshipType", nullable = false)

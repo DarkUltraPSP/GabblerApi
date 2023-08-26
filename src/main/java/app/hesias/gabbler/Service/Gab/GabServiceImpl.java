@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,15 +30,10 @@ public class GabServiceImpl implements GabService{
     public GabResult getGabById(int id) {
         try {
             Gab gab = gabRepo.findById(id).orElseThrow(EntityNotFoundException::new);
-            return GabResult.builder()
-                    .gab(gab)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new GabResult(gab, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return GabResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new GabResult(null, RequestStatus.NOT_FOUND);
         }
     }
 
@@ -48,15 +42,10 @@ public class GabServiceImpl implements GabService{
         try {
             if (gab.getContent() == null || gab.getMediaUrl() == null) throw new Exception("Content and MediaUrl cannot be null");
             gabRepo.save(gab);
-            return GabResult.builder()
-                    .gab(gab)
-                    .requestStatus(RequestStatus.CREATED)
-                    .build();
+            return new GabResult(gab, RequestStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return GabResult.builder()
-                    .requestStatus(RequestStatus.BAD_REQUEST)
-                    .build();
+            return new GabResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,20 +55,13 @@ public class GabServiceImpl implements GabService{
             Gab gabToUpdate = gabRepo.findById(id).orElseThrow(EntityNotFoundException::new);
             modelMapper.map(gab, gabToUpdate);
             gabRepo.save(gabToUpdate);
-            return GabResult.builder()
-                    .gab(gabToUpdate)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new GabResult(gabToUpdate, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return GabResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new GabResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return GabResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new GabResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -89,20 +71,13 @@ public class GabServiceImpl implements GabService{
         try {
             Gab gabToDelete = gabRepo.findById(id).orElseThrow(EntityNotFoundException::new);
             gabRepo.delete(gabToDelete);
-            return GabResult.builder()
-                    .gab(gabToDelete)
-                    .requestStatus(RequestStatus.OK)
-                    .build();
+            return new GabResult(gabToDelete, RequestStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             if (e instanceof EntityNotFoundException) {
-                return GabResult.builder()
-                        .requestStatus(RequestStatus.NOT_FOUND)
-                        .build();
+                return new GabResult(null, RequestStatus.NOT_FOUND);
             } else {
-                return GabResult.builder()
-                        .requestStatus(RequestStatus.INTERNAL_SERVER_ERROR)
-                        .build();
+                return new GabResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

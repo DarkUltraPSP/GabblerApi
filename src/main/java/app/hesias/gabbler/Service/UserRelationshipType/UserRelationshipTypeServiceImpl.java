@@ -16,12 +16,9 @@ public class UserRelationshipTypeServiceImpl implements UserRelationshipTypeServ
     public UserRelationshipTypeResult createUserRelationshipType(UserRelationshipType userRelationshipType) {
         try {
             userRelationshipTypeRepository.save(userRelationshipType);
-            return UserRelationshipTypeResult.builder()
-                    .userRelationshipType(userRelationshipType)
-                    .build();
+            return new UserRelationshipTypeResult(userRelationshipType, RequestStatus.CREATED);
         } catch (Exception e) {
-            return UserRelationshipTypeResult.builder()
-                    .build();
+            return new UserRelationshipTypeResult(null, RequestStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -29,13 +26,9 @@ public class UserRelationshipTypeServiceImpl implements UserRelationshipTypeServ
     public UserRelationshipTypeResult getUserRelationshipTypeByLibelle(String libelle) {
         try {
             UserRelationshipType userRelationshipType = userRelationshipTypeRepository.findByLibelle(libelle).orElseThrow(EntityNotFoundException::new);
-            return UserRelationshipTypeResult.builder()
-                    .userRelationshipType(userRelationshipType)
-                    .build();
+            return new UserRelationshipTypeResult(userRelationshipType, RequestStatus.OK);
         } catch (Exception e) {
-            return UserRelationshipTypeResult.builder()
-                    .requestStatus(RequestStatus.NOT_FOUND)
-                    .build();
+            return new UserRelationshipTypeResult(null, RequestStatus.NOT_FOUND);
         }
     }
 }
