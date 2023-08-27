@@ -1,5 +1,6 @@
 package app.hesias.gabbler.Controllers;
 
+import app.hesias.gabbler.Repository.UserRepo;
 import app.hesias.gabbler.utils.Payload.JwtAuthenticationResponse;
 import app.hesias.gabbler.utils.Payload.LoginRequest;
 import app.hesias.gabbler.utils.Security.JwtUtils;
@@ -19,6 +20,7 @@ public class ApiController {
     @Autowired
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final UserRepo userRepo;
 
     @GetMapping("/protected")
     public ResponseEntity<String> protectedEndpoint() {

@@ -1,6 +1,7 @@
 package app.hesias.gabbler.utils.Security;
 
 import app.hesias.gabbler.Model.Entity.User;
+import app.hesias.gabbler.utils.Security.Services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 
 @Slf4j
@@ -21,13 +23,15 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-        User userPrincipal = (User) authentication.getPrincipal();
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
+        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new java.util.Date())
                 .setExpiration(new java.util.Date((new java.util.Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(secretKey)
                 .compact();
     }
 

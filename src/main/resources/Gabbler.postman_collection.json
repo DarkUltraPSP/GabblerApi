@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "1c969c9b-0f59-496f-a5d5-7d883e9524d1",
+		"name": "Gabbler",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18418232"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"nom_utilisateur\",\n  \"firstname\": \"Prénom\",\n  \"lastname\": \"Nom\",\n  \"email\": \"exemple@exemple.com\",\n  \"birthdate\": \"2023-07-27T12:34:56\",\n  \"phone\": 1234567890,\n  \"password\": \"mot_de_passe\",\n  \"biography\": \"Ceci est ma biographie.\",\n  \"profilePictureUrl\": \"https://exemple.com/mon_image_de_profil.jpg\",\n  \"bannerPictureUrl\": \"https://exemple.com/mon_image_de_banniere.jpg\",\n  \"isActivated\": true,\n  \"isBanned\": false,\n  \"isPrivate\": false\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"test\",\n  \"password\": \"mot_de_passe\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"tefdsdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gab",
+			"item": [
+				{
+					"name": "Get All Gabs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gab",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Gab by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gab/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gab",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Gab",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"C'est le contenu du gab\",\n    \"mediaUrl\": \"https://example.com/media\",\n    \"user\": {\n        \"idUser\": 3\n    }\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:8080/gab",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Gab",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Ceci est un test\",\n  \"mediaUrl\": \"https://exemple.com/nouveau_fichier_media.jpg\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/gab/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gab",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Gab",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gab/13",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gab",
+								"13"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UserRelationship",
+			"item": [
+				{
+					"name": "Get Relationship By User Ids",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user-relationship?idUser1=3&idUser2=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user-relationship"
+							],
+							"query": [
+								{
+									"key": "idUser1",
+									"value": "3"
+								},
+								{
+									"key": "idUser2",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Relationship",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userRelationshipType\": {\n        \"idRelationshipType\": 1\n    },\n    \"user1\" : {\n        \"idUser\" : 4\n    },\n    \"user2\" : {\n        \"idUser\" : 3\n    }\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost:8080/user-relationship",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user-relationship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Relationship",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Nouveau contenu du gab\",\n  \"mediaUrl\": \"https://exemple.com/nouveau_fichier_media.jpg\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/user-relationship",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user-relationship"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Relationship",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user-relationship",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user-relationship"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Interaction",
+			"item": [
+				{
+					"name": "Get Interaction by Gab",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/interaction/gab/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"interaction",
+								"gab",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interaction by User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/interaction/user/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"interaction",
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interaction by Type and Gab",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "BASE_URL/interactions/by-type-and-gab/{type}/{id}",
+							"host": [
+								"BASE_URL"
+							],
+							"path": [
+								"interactions",
+								"by-type-and-gab",
+								"{type}",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interaction by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "BASE_URL/interactions/{id}",
+							"host": [
+								"BASE_URL"
+							],
+							"path": [
+								"interactions",
+								"{id}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Interaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"idUser\" : 3\r\n    },\r\n    \"gab\": {\r\n        \"idGab\" : 6\r\n    },\r\n    \"interactionType\": {\r\n        \"idInteractionType\" : 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/interaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"interaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Interaction",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "BASE_URL/interactions",
+							"host": [
+								"BASE_URL"
+							],
+							"path": [
+								"interactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Interaction",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "BASE_URL/interactions",
+							"host": [
+								"BASE_URL"
+							],
+							"path": [
+								"interactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"mot_de_passe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
