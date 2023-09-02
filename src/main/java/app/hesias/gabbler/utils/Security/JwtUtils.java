@@ -28,6 +28,7 @@ public class JwtUtils {
         SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
         return Jwts.builder()
+                .setId(String.valueOf(userPrincipal.getId()))
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new java.util.Date())
                 .setExpiration(new java.util.Date((new java.util.Date()).getTime() + jwtExpirationMs))

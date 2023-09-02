@@ -14,9 +14,7 @@ import java.util.Date;
 public class Gab {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idGab", nullable = false)
     private int idGab;
-    @Column(name = "content", nullable = false, length = 255)
     private String content;
     private Date createdAt = new Date();
     private String mediaUrl;

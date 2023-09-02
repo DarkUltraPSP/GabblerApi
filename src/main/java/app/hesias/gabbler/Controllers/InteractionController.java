@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/interaction")
 @AllArgsConstructor
@@ -26,13 +28,11 @@ public class InteractionController {
     }
 
     @GetMapping("/gab/{idGab}")
-    public ResponseEntity<InteractionResults> getInteractionByGab(@PathVariable int idGab) {
+    public ResponseEntity<List<Interaction>> getInteractionByGab(@PathVariable int idGab) {
         InteractionResults interactionResults = interactionService.getInteractionByGab(idGab);
-        if (interactionResults.getRequestStatus() == RequestStatus.OK) {
-            return ResponseEntity.ok(interactionResults);
-        } else {
-            return ResponseEntity.status(interactionResults.getRequestStatus().getValue()).body(interactionResults);
-        }
+        return interactionResults.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(interactionResults.getRequestStatus().getValue()).body(interactionResults.getInteractions())
+                : ResponseEntity.status(interactionResults.getRequestStatus().getValue()).build();
     }
 
     @GetMapping("/{interactionType}/{idGab}")

@@ -6,7 +6,9 @@ import app.hesias.gabbler.Model.Result.JwtResult;
 import app.hesias.gabbler.Model.Result.UserResult;
 import app.hesias.gabbler.Service.User.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder encoder;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -36,14 +40,6 @@ public class UserController {
         return toCreate.getRequestStatus() == RequestStatus.CREATED ?
                 ResponseEntity.status(toCreate.getRequestStatus().getValue()).body(toCreate.getUser())
                 : ResponseEntity.status(toCreate.getRequestStatus().getValue()).build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody String username,@RequestBody String password) {
-        JwtResult jwtResult = userService.login(username, password);
-        return jwtResult.getRequestStatus() == RequestStatus.OK ?
-                ResponseEntity.status(jwtResult.getRequestStatus().getValue()).body(jwtResult.getJwt())
-                : ResponseEntity.status(jwtResult.getRequestStatus().getValue()).build();
     }
 
     @PutMapping("/{id}")

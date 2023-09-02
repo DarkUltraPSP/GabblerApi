@@ -2,7 +2,9 @@ package app.hesias.gabbler.Service.Gab;
 
 import app.hesias.gabbler.Model.Entity.Gab;
 import app.hesias.gabbler.Model.Entity.RequestStatus;
+import app.hesias.gabbler.Model.Entity.User;
 import app.hesias.gabbler.Model.Result.GabResult;
+import app.hesias.gabbler.Model.Result.GabResults;
 import app.hesias.gabbler.Repository.GabRepo;
 import app.hesias.gabbler.Repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -38,10 +41,27 @@ public class GabServiceImpl implements GabService{
     }
 
     @Override
+    public GabResults getGabsByUserId(int id) {
+        try {
+            userRepo.findById(id).orElseThrow(EntityNotFoundException::new);
+            Optional<List<Gab>> gabs = gabRepo.findGabsByUserId(id);
+            return new GabResults(gabs.orElseThrow(EntityNotFoundException::new), RequestStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (e instanceof EntityNotFoundException) {
+                return new GabResults(null, RequestStatus.NOT_FOUND);
+            }
+            return new GabResults(null, RequestStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public GabResult createGab(Gab gab) {
         try {
-            if (gab.getContent() == null || gab.getMediaUrl() == null) throw new Exception("Content and MediaUrl cannot be null");
+            User author = (userRepo.findById(gab.getUser().getIdUser()).orElseThrow(EntityNotFoundException::new));
+            if (gab.getContent() == null) throw new Exception("Content and MediaUrl cannot be null");
             gabRepo.save(gab);
+            gab.setUser(author);
             return new GabResult(gab, RequestStatus.CREATED);
         } catch (Exception e) {
             log.error(e.getMessage());

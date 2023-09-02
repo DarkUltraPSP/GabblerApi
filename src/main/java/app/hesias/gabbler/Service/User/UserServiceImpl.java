@@ -15,9 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final PasswordEncoder encoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -47,8 +50,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResult createUser(User user) {
         try {
-            userRepo.findByUsername(user.getUsername()).orElseThrow(EntityExistsException::new);
-            userRepo.findByEmail(user.getEmail()).orElseThrow(EntityExistsException::new);
+            Optional<User> existingUser = userRepo.findByUsername(user.getUsername());
+            Optional<User> existingEmail = userRepo.findByEmail(user.getEmail());
+            if (existingUser.isPresent() || existingEmail.isPresent()) {
+                throw new EntityExistsException("User with the same username already exists");
+            }
+            user.setPassword(encoder.encode(user.getPassword()));
             userRepo.save(user);
             return new UserResult(user, RequestStatus.CREATED);
         } catch (Exception e) {

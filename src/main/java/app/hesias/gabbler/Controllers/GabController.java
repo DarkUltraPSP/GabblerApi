@@ -3,6 +3,7 @@ package app.hesias.gabbler.Controllers;
 import app.hesias.gabbler.Model.Entity.Gab;
 import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Result.GabResult;
+import app.hesias.gabbler.Model.Result.GabResults;
 import app.hesias.gabbler.Service.Gab.GabService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,14 @@ public class GabController {
         GabResult gabResult = gabService.getGabById(id);
         return gabResult.getRequestStatus() == RequestStatus.OK ?
                 ResponseEntity.status(gabResult.getRequestStatus().getValue()).body(gabResult.getGab())
+                : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Gab>> getGabsByUserId(@PathVariable int id) {
+        GabResults gabResults = gabService.getGabsByUserId(id);
+        return gabResults.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(gabResults.getRequestStatus().getValue()).body(gabResults.getGabs())
                 : ResponseEntity.notFound().build();
     }
 
