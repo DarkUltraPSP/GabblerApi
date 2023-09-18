@@ -4,6 +4,7 @@ import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.User;
 import app.hesias.gabbler.Model.Result.JwtResult;
 import app.hesias.gabbler.Model.Result.UserResult;
+import app.hesias.gabbler.Model.Result.UserResults;
 import app.hesias.gabbler.Service.User.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,14 @@ public class UserController {
         UserResult userResult = userService.getUserByUuid(id);
         return userResult.getRequestStatus() == RequestStatus.OK ?
                 ResponseEntity.status(userResult.getRequestStatus().getValue()).body(userResult.getUser())
+                : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<List<User>> getUserByUsername(@PathVariable String username) {
+        UserResults userResult = userService.getUserByUsername(username);
+        return userResult.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(userResult.getRequestStatus().getValue()).body(userResult.getUsers())
                 : ResponseEntity.notFound().build();
     }
 

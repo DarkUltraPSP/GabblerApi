@@ -4,6 +4,7 @@ import app.hesias.gabbler.Model.Entity.RequestStatus;
 import app.hesias.gabbler.Model.Entity.User;
 import app.hesias.gabbler.Model.Result.JwtResult;
 import app.hesias.gabbler.Model.Result.UserResult;
+import app.hesias.gabbler.Model.Result.UserResults;
 import app.hesias.gabbler.Repository.UserRepo;
 import app.hesias.gabbler.utils.Security.JwtUtils;
 import jakarta.persistence.EntityExistsException;
@@ -44,6 +45,17 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error(e.getMessage());
             return new UserResult(null, RequestStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public UserResults getUserByUsername(String username) {
+        try {
+            List<User> users = userRepo.searchByUsername(username).orElseThrow(EntityNotFoundException::new);
+            return new UserResults(users, RequestStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new UserResults(null, RequestStatus.NOT_FOUND);
         }
     }
 
