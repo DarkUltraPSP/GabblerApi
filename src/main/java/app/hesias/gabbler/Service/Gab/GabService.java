@@ -11,6 +11,7 @@ public interface GabService {
     List<Gab> getAllGabs();
     GabResult getGabById(int id);
     GabResults getGabsByUserId(int id);
+    GabResults searchByContent(String content);
     GabResult createGab(Gab gab);
     GabResult updateGab(int id, Gab gab);
     GabResult deleteGab(int id);

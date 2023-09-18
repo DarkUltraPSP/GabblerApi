@@ -38,6 +38,14 @@ public class GabController {
                 : ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/content/{content}")
+    public ResponseEntity<List<Gab>> searchByContent(@PathVariable String content) {
+        GabResults gabResults = gabService.searchByContent(content);
+        return gabResults.getRequestStatus() == RequestStatus.OK ?
+                ResponseEntity.status(gabResults.getRequestStatus().getValue()).body(gabResults.getGabs())
+                : ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<Gab> createGab(@RequestBody Gab gab) {
         GabResult toCreate = gabService.createGab(gab);

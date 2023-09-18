@@ -56,6 +56,20 @@ public class GabServiceImpl implements GabService{
     }
 
     @Override
+    public GabResults searchByContent(String content) {
+        try {
+            Optional<List<Gab>> gabs = gabRepo.searchByContent(content);
+            return new GabResults(gabs.orElseThrow(EntityNotFoundException::new), RequestStatus.OK);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (e instanceof EntityNotFoundException) {
+                return new GabResults(null, RequestStatus.NOT_FOUND);
+            }
+            return new GabResults(null, RequestStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public GabResult createGab(Gab gab) {
         try {
             User author = (userRepo.findById(gab.getUser().getIdUser()).orElseThrow(EntityNotFoundException::new));
